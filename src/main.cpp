@@ -9,4 +9,5 @@ int main(){
 	printhw();
 	testFunc();
 	fmt::print("Testing\n");
+	configCheck();
 }
