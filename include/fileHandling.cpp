@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <filesystem>
+#include <ostream>
 
 void testFunc(){
 	std::cout << "This library is working\n";
@@ -21,15 +22,32 @@ int configCheck(){
 	if(os == "Windows"){
 		configPath = "C:/Users/%username%/AppData/Roaming/osmp";
 		std::cout << "You're using windows";
+		if(!std::filesystem::exists(configPath)){
+			std::filesystem::create_directory(configPath);
+			std::cout << "Config directory created: " << configPath << '\n';
+		}
+		else{
+			std::cout << "Config folder already exists\n";
+		}
 	}
 	else if(os == "Linux" || os == "Macos"){
 		configPath = "~/.config/osmp";
 		std::cout << "You're using GNU/Linux";
+		if(!std::filesystem::exists(configPath)){
+			std::filesystem::create_directory(configPath);
+			std::cout << "Config directory created: " << configPath << '\n';
+		}
+		else {
+			std::cout << "Config folder already exists\n";
+		}
 	}
 	else{
-		std::cout << "Where am i supposed to put the config files now :(";
+		std::cout << "Where am i supposed to put the config files now :'(";
 		return -1;
 	}
 	return 0;
+	
+	
+	
 }
 
