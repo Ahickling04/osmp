@@ -1,8 +1,9 @@
 #include "fileHandling.h"
 
+#include <ios>
 #include <iostream>
 #include <filesystem>
-#include <ostream>
+#include <fstream>
 
 void testFunc(){
 	std::cout << "This library is working\n";
@@ -29,10 +30,12 @@ int configCheck(){
 	
 	if(os == "Windows"){
 		configPath = "C:/Users/%username%/AppData/Roaming/osmp";
-		std::cout << "You're using windows\n";
+		//std::cout << "You're using windows\n";
+		//Does the config folder exist? if not create the folder
 		if(!std::filesystem::exists(configPath)){
 			std::filesystem::create_directories(configPath);
 			std::cout << "Config directory created: " << configPath << '\n';
+			std::fstream("~/config/osmp/config.txt", std::ios::in);
 		}
 		else{
 			std::cout << "Config folder already exists\n";
@@ -40,10 +43,11 @@ int configCheck(){
 	}
 	else if(os == "Linux" || os == "Macos"){
 		configPath = "~/.config/osmp";
-		std::cout << "You're using GNU/Linux\n";
+		//std::cout << "You're using GNU/Linux\n";
 		if(!std::filesystem::exists(configPath)){
 			std::filesystem::create_directories(configPath);
 			std::cout << "Config directory created: " << configPath << '\n';
+			std::fstream("~/config/osmp/config.txt", std::ios::in);
 		}
 		else {
 			std::cout << "Config folder already exists\n";
