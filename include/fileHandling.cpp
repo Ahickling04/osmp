@@ -9,6 +9,14 @@ void testFunc(){
 }
 
 int configCheck(){
+	/*The following code is to make check what operating system the ser is on
+	 * then checking to see if the user has a config directory in ither .config (Linux & Macos)
+	 * or in AppData (Windows). currently exprencing an issue saying that there is a config file
+	 * within my file system however i cannot see it anywhere no matter how i check.
+	 * current test happening rn is seeing if the app staying open means that the directory will still
+	 * exist. 
+	 */
+	
 	#if defined _WIN32
 	const std::string os = "Windows";
 	#elif defined (__linux__)
@@ -21,9 +29,9 @@ int configCheck(){
 	
 	if(os == "Windows"){
 		configPath = "C:/Users/%username%/AppData/Roaming/osmp";
-		std::cout << "You're using windows";
+		std::cout << "You're using windows\n";
 		if(!std::filesystem::exists(configPath)){
-			std::filesystem::create_directory(configPath);
+			std::filesystem::create_directories(configPath);
 			std::cout << "Config directory created: " << configPath << '\n';
 		}
 		else{
@@ -32,9 +40,9 @@ int configCheck(){
 	}
 	else if(os == "Linux" || os == "Macos"){
 		configPath = "~/.config/osmp";
-		std::cout << "You're using GNU/Linux";
+		std::cout << "You're using GNU/Linux\n";
 		if(!std::filesystem::exists(configPath)){
-			std::filesystem::create_directory(configPath);
+			std::filesystem::create_directories(configPath);
 			std::cout << "Config directory created: " << configPath << '\n';
 		}
 		else {
