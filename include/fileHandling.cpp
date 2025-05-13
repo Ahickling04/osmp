@@ -1,6 +1,6 @@
 #include "fileHandling.h"
 
-#include <ios>
+#include <cstdlib>
 #include <iostream>
 #include <filesystem>
 #include <fstream>
@@ -22,7 +22,7 @@ int configCheck(){
 	const std::string os = "Windows";
 	#elif defined (__linux__)
 	const std::string os = "Linux";
-	#else defined (__APPLE__)
+	#elif defined (__APPLE__)
 	const std::string os = "Macos";
 	#endif
 
@@ -42,7 +42,10 @@ int configCheck(){
 		}
 	}
 	else if(os == "Linux" || os == "Macos"){
-		configPath = "~/.config/osmp";
+		
+		configPath = "/home/$USER/.config/osmp";
+		
+
 		//std::cout << "You're using GNU/Linux\n";
 		if(!std::filesystem::exists(configPath)){
 			std::filesystem::create_directories(configPath);
