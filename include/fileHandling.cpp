@@ -26,11 +26,10 @@ int configCheck(){
 	const std::string os = "Macos";
 	#endif
 
-	std::filesystem::path configPath;
-	
+	std::filesystem::path configPath;	
 	if(os == "Windows"){
-		configPath = "C:/Users/%username%/AppData/Roaming/osmp";
 		//std::cout << "You're using windows\n";
+		configPath = std::getenv("HOME/appdata/local/osmp/");
 		//Does the config folder exist? if not create the folder
 		if(!std::filesystem::exists(configPath)){
 			std::filesystem::create_directories(configPath);
@@ -43,14 +42,13 @@ int configCheck(){
 	}
 	else if(os == "Linux" || os == "Macos"){
 		
-		configPath = "/home/$USER/.config/osmp";
-		
-
+		configPath = std::getenv("HOME");
+		std::cout << configPath;
 		//std::cout << "You're using GNU/Linux\n";
-		if(!std::filesystem::exists(configPath)){
+		if(!std::filesystem::exists(configPath += "/.config/osmp")){
 			std::filesystem::create_directories(configPath);
 			std::cout << "Config directory created: " << configPath << '\n';
-			std::fstream("~/config/osmp/config.txt", std::ios::in);
+			std::fstream(configPath += "config.txt", std::ios::in);
 		}
 		else {
 			std::cout << "Config folder already exists\n";
