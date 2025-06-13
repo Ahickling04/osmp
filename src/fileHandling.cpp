@@ -34,7 +34,7 @@ int configCheck(){
 		if(!std::filesystem::exists(configPath += "/appdata/local/osmp/")){
 			std::filesystem::create_directories(configPath += "/appdata/local/osmp/");
 			std::cout << "Config directory created: " << configPath << '\n';
-			std::fstream(configPath += "/appdata/local/osmp/config.txt", std::ios::in);
+			std::fstream(configPath += "/appdata/local/osmp/config.toml", std::ios::in);
 		}
 		else{
 			std::cout << "Config folder already exists\n";
@@ -46,7 +46,7 @@ int configCheck(){
 		if(!std::filesystem::exists(configPath += "/.config/osmp")){
 			std::filesystem::create_directories(configPath);
 			std::cout << "Config directory created: " << configPath << '\n';
-			std::fstream(configPath += "/.config/osmp/config.txt", std::ios::in);
+	std::fstream(configPath += "/.config/osmp/config.txt", std::ios::in);
 		}
 		else {
 			std::cout << "Config folder already exists\n";
@@ -56,9 +56,14 @@ int configCheck(){
 		std::cout << "Where am i supposed to put the config files now :'(";
 		return -1;
 	}
+	return 0;	
+}
+
+int mkDefaults(){
+	/* what this function will do is generate some default settings that the prgram will load of first launch.
+	 * this will be done in a TOML format so that it is easy for the end user to edit themselves
+	 * It will also assume some defaults as well, like the audio driver, the location of the music folder.
+	 * it Shouldn't be too hard.*/
 	return 0;
-	
-	
-	
 }
 
