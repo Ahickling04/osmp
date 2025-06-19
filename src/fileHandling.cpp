@@ -4,6 +4,8 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
+#include <toml++/impl/table.hpp>
+#include <toml++/toml.h>
 
 void testFunc(){
 	std::cout << "This library is working\n";
@@ -64,6 +66,7 @@ int mkDefaults(){
 	 * this will be done in a TOML format so that it is easy for the end user to edit themselves
 	 * It will also assume some defaults as well, like the audio driver, the location of the music folder.
 	 * it Shouldn't be too hard.*/
+		
 	return 0;
 }
 
