@@ -48,7 +48,7 @@ int configCheck(){
 		if(!std::filesystem::exists(configPath += "/.config/osmp")){
 			std::filesystem::create_directories(configPath);
 			std::cout << "Config directory created: " << configPath << '\n';
-	std::fstream(configPath += "/.config/osmp/config.txt", std::ios::in);
+	std::fstream(configPath += "/.config/osmp/config.toml", std::ios::in);
 		}
 		else {
 			std::cout << "Config folder already exists\n";
