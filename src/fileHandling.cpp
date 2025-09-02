@@ -4,14 +4,16 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
-#include <toml++/impl/table.hpp>
+//#include <toml++/impl/table.hpp>
 #include <toml++/toml.h>
 
 void testFunc(){
 	std::cout << "This library is working\n";
 }
 
-int configCheck(){
+
+
+int configCheck(std::filesystem::path configPath){
 	/*The following code is to make check what operating system the ser is on
 	 * then checking to see if the user has a config directory in ither .config (Linux & Macos)
 	 * or in AppData (Windows). currently exprencing an issue saying that there is a config file
@@ -20,6 +22,8 @@ int configCheck(){
 	 * exist. 
 	 */
 	
+	
+
 	#if defined _WIN32
 	const std::string os = "Windows";
 	#elif defined (__linux__)
@@ -28,13 +32,17 @@ int configCheck(){
 	const std::string os = "Macos";
 	#endif
 
-	std::filesystem::path configPath;	
+	//std::filesystem::path configPath;	
 	if(os == "Windows"){
 		//std::cout << "You're using windows\n";
-		configPath = std::getenv("USERPROFILE");
+		std::filesystem::path homePath = std::getenv("USERPROFILE");
 		//Does the config folder exist? if not create the folder
-		if(!std::filesystem::exists(configPath += "/appdata/local/osmp/")){
-			std::filesystem::create_directories(configPath += "/appdata/local/osmp/");
+		
+		//temp vairable to create the config variable
+		std::filesystem::path configPath = homePath +="/appdata/local/osmp/";
+
+		if(!std::filesystem::exists(configPath)){
+			std::filesystem::create_directories(configPath);
 			std::cout << "Config directory created: " << configPath << '\n';
 			std::fstream(configPath += "/appdata/local/osmp/config.toml", std::ios::in);
 		}
@@ -44,11 +52,12 @@ int configCheck(){
 	}
 	else if(os == "Linux" || os == "Macos"){
 		
-		configPath = std::getenv("HOME");
-		if(!std::filesystem::exists(configPath += "/.config/osmp")){
+		std::filesystem::path homePath = std::getenv("HOME");
+		configPath = homePath +="/.config/osmp/";
+		if(!std::filesystem::exists(configPath)){
 			std::filesystem::create_directories(configPath);
 			std::cout << "Config directory created: " << configPath << '\n';
-	std::fstream(configPath += "/.config/osmp/config.toml", std::ios::in);
+			
 		}
 		else {
 			std::cout << "Config folder already exists\n";
@@ -61,12 +70,22 @@ int configCheck(){
 	return 0;	
 }
 
-int mkDefaults(){
+int mkDefaults(std::filesystem::path configPath){
 	/* what this function will do is generate some default settings that the prgram will load of first launch.
 	 * this will be done in a TOML format so that it is easy for the end user to edit themselves
 	 * It will also assume some defaults as well, like the audio driver, the location of the music folder.
 	 * it Shouldn't be too hard.*/
-		
+	
+	//create the Music path variable
+
+	//create the TOML table
+	toml::table config;
+	
+	//add values that will be tha main titles
+	//config.insert("directories.music");
+	
+
+
 	return 0;
 }
 

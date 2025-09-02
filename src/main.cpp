@@ -13,13 +13,15 @@ int main(){
 	testFunc();
 	
 
+
 	while(appStatus == true){
 		//A test toi see whether the directory stays open while the app is running.
 		//because for some reason its saying that the directory exists when i cannot find it within my file system
 
 		//this code should only run once... SHOULD being the operative word here.
 		for(int i = 0; i < 1; i++){
-			configCheck();
+			std::filesystem::path configPath;
+			configCheck(configPath);
 			std::cout << "Just some experimental code, nothing to see here\n";
 			
 			//Basic CLI exit code, should repeat after a invalid response or by saying no

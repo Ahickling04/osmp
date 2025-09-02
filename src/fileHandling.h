@@ -1,5 +1,6 @@
 #pragma once
+#include <filesystem>
 
 void testFunc();
 
-int configCheck();
+int configCheck(std::filesystem::path);
