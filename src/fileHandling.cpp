@@ -13,7 +13,7 @@ void testFunc(){
 
 
 
-int configCheck(std::filesystem::path configPath){
+int configCheck(std::filesystem::path homePath){
 	/*The following code is to make check what operating system the ser is on
 	 * then checking to see if the user has a config directory in ither .config (Linux & Macos)
 	 * or in AppData (Windows). currently exprencing an issue saying that there is a config file
@@ -53,11 +53,11 @@ int configCheck(std::filesystem::path configPath){
 	else if(os == "Linux" || os == "Macos"){
 		
 		std::filesystem::path homePath = std::getenv("HOME");
-		configPath = homePath +="/.config/osmp/";
+		std::filesystem::path configPath = homePath +="/.config/osmp/";
 		if(!std::filesystem::exists(configPath)){
 			std::filesystem::create_directories(configPath);
 			std::cout << "Config directory created: " << configPath << '\n';
-			
+			fileExists(configPath);
 		}
 		else {
 			std::cout << "Config folder already exists\n";
@@ -70,22 +70,27 @@ int configCheck(std::filesystem::path configPath){
 	return 0;	
 }
 
-int mkDefaults(std::filesystem::path configPath){
+int mkDefaults(std::filesystem::path homePath){
 	/* what this function will do is generate some default settings that the prgram will load of first launch.
 	 * this will be done in a TOML format so that it is easy for the end user to edit themselves
 	 * It will also assume some defaults as well, like the audio driver, the location of the music folder.
 	 * it Shouldn't be too hard.*/
 	
 	//create the Music path variable
+	std::filesystem::path musicPath = homePath += "/Music/";
 
 	//create the TOML table
 	toml::table config;
 	
 	//add values that will be tha main titles
-	//config.insert("directories.music");
+	config.insert("directories.music", musicPath);
 	
-
+	//create the file in the directory
+	
 
 	return 0;
 }
 
+bool fileExists(std::filesystem::path& configPath, const std::string& "config.toml") {
+    return std::filesystem::exists(configPath += "config.toml");
+}
