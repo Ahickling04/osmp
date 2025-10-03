@@ -57,7 +57,7 @@ int configCheck(std::filesystem::path homePath){
 		if(!std::filesystem::exists(configPath)){
 			std::filesystem::create_directories(configPath);
 			std::cout << "Config directory created: " << configPath << '\n';
-			fileExists(configPath);
+			//fileExists(configPath);
 		}
 		else {
 			std::cout << "Config folder already exists\n";
@@ -77,13 +77,14 @@ int mkDefaults(std::filesystem::path homePath){
 	 * it Shouldn't be too hard.*/
 	
 	//create the Music path variable
-	std::filesystem::path musicPath = homePath += "/Music/";
+	
+	//std::filesystem::path musicPath = homePath += "/Music/"; commented for testing purposes
 
 	//create the TOML table
-	toml::table config;
+	//toml::table config;
 	
 	//add values that will be tha main titles
-	config.insert("directories.music", musicPath);
+	// config.insert("directories.music", musicPath);
 	
 	//create the file in the directory
 	
@@ -91,6 +92,6 @@ int mkDefaults(std::filesystem::path homePath){
 	return 0;
 }
 
-bool fileExists(std::filesystem::path& configPath, const std::string& "config.toml") {
-    return std::filesystem::exists(configPath += "config.toml");
-}
+// bool fileExists(std::filesystem::path& configPath, const std::string& "config.toml") {
+//     return std::filesystem::exists(configPath += "config.toml");
+// }

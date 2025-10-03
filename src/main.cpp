@@ -1,4 +1,3 @@
-#include "../include/lib.h"
 #include "fileHandling.h"
 
 #include <iostream>
