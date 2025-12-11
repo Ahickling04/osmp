@@ -8,11 +8,6 @@ int main(){
 	bool appStatus = true;
 	char closeOption;
 
-	//a function to test whether the library is working or not
-	testFunc();
-	
-
-
 	while(appStatus == true){
 		//A test toi see whether the directory stays open while the app is running.
 		//because for some reason its saying that the directory exists when i cannot find it within my file system

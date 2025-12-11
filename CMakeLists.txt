@@ -78,9 +78,9 @@ set(CUSTOM_LIBRARIES
 )
 
 if(CUSTOM_LIBRARIES)
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${CUSTOM_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${CUSTOM_LIBRARIES}, ${wxWidgets_LIBRARIES})
 endif()
-
+#target_link_libraries(myapp ${wxWidgets_LIBRARIES})
 # ============================================
 # Platform-Specific Settings
 # ============================================
@@ -89,6 +89,10 @@ if(WIN32)
     target_compile_definitions(${PROJECT_NAME} PRIVATE PLATFORM_WINDOWS)
     # Add Windows-specific libraries
     # target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32)
+    find_package(wxWidgets REQUIRED COMPONENTS net core base)
+if(wxWidgets_USE_FILE) # not defined in CONFIG mode
+    include(${wxWidgets_USE_FILE})
+endif()
 elseif(APPLE)
     # macOS-specific settings
     target_compile_definitions(${PROJECT_NAME} PRIVATE PLATFORM_MACOS)
