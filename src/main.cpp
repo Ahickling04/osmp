@@ -2,13 +2,24 @@
 
 #include <iostream>
 #include <filesystem>
+#include <wx/wx.h>
+
+class osmp : public wxApp{
+public:
+	bool OnInit() override;
+};
+
+// This defines the equivalent of main() for the current platform.
+wxIMPLEMENT_APP(osmp);
+
 
 int main(){
 	//variables
 	bool appStatus = true;
 	char closeOption;
 
-	while(appStatus == true){
+
+
 		//A test toi see whether the directory stays open while the app is running.
 		//because for some reason its saying that the directory exists when i cannot find it within my file system
 
@@ -33,6 +44,5 @@ int main(){
 			}
 		};
 
-	};
+};
 
-}
