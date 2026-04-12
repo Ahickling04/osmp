@@ -4,14 +4,7 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
-//#include <toml++/impl/table.hpp>
 #include <toml++/toml.h>
-
-void testFunc(){
-	std::cout << "This library is working\n";
-}
-
-
 
 int configCheck(std::filesystem::path homePath){
 	/*The following code is to make check what operating system the ser is on

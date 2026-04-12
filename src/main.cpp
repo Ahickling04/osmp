@@ -2,42 +2,73 @@
 
 #include <iostream>
 #include <filesystem>
+#include <wx/wx.h>
 
-int main(){
-	//variables
-	bool appStatus = true;
-	char closeOption;
+class osmp : public wxApp{
+public:
+	bool OnInit() override;
+};
 
-	//a function to test whether the library is working or not
-	testFunc();
+
+
+class MyFrame : public wxFrame {
+	public:
+		MyFrame();
 	
+	private:
+		void OnHello(wxCommandEvent& event);
+        void OnExit(wxCommandEvent& event);
+		void OnAbout(wxCommandEvent& event);
+};
 
-
-	while(appStatus == true){
-		//A test toi see whether the directory stays open while the app is running.
-		//because for some reason its saying that the directory exists when i cannot find it within my file system
-
-		//this code should only run once... SHOULD being the operative word here.
-		for(int i = 0; i < 1; i++){
-			std::filesystem::path configPath;
-			configCheck(configPath);
-			std::cout << "Just some experimental code, nothing to see here\n";
-			
-			//Basic CLI exit code, should repeat after a invalid response or by saying no
-			std::cout << "Would you like to exit the application?\n";
-			std::cin >> closeOption;
-			if(closeOption == 'y'){
-				appStatus = false;
-			}
-			else if(closeOption == 'n'){
-				i = 0;
-			}
-			else{
-				std::cout << "That was not an option\n";
-				i=0;
-			}
-		};
-
-	};
-
+bool osmp::OnInit() {
+	MyFrame *frame = new MyFrame();
+	frame->Show(true);
+	return true;
 }
+
+enum {
+	ID_Hello = 1
+};
+
+
+// 
+MyFrame::MyFrame()
+	: wxFrame(nullptr, wxID_ANY, "OSMP Application") {
+		wxMenu *menuFile = new wxMenu;
+		menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
+			"Help string shown in status bar for this menu item");
+		
+			menuFile->AppendSeparator();
+		menuFile->Append(wxID_EXIT);
+
+		wxMenu *menuHelp = new wxMenu;
+		menuHelp->Append(wxID_ABOUT);
+		
+		wxMenuBar *menuBar = new wxMenuBar;
+		menuBar ->Append(menuFile, "&File");
+		menuBar ->Append(menuHelp, "&Help");
+
+		SetMenuBar(menuBar);
+
+		CreateStatusBar();
+		SetStatusText("OSMP");
+
+
+		//Bind events
+		Bind(wxEVT_MENU, &MyFrame::OnAbout, this, wxID_ABOUT);
+		Bind(wxEVT_MENU, &MyFrame::OnExit, this, wxID_EXIT);
+		}
+
+
+void MyFrame::OnExit(wxCommandEvent& event) {
+    Close(true);
+}
+
+void MyFrame::OnAbout(wxCommandEvent& event) {
+    wxMessageBox("This is a OSMP. An open source music player, designed to run cross platform.",
+                "About OSMP", wxOK | wxICON_INFORMATION);
+}
+
+// This defines the equivalent of main() for the current platform.
+wxIMPLEMENT_APP(osmp);
