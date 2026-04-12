@@ -14,7 +14,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Option to build shared libraries
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
-
 # ============================================
 # Find Packages
 # ============================================
@@ -22,25 +21,28 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 find_package(wxWidgets REQUIRED COMPONENTS net core base)
 include(${wxWidgets_USE_FILE})
 
-
-
 # ============================================
 # Source Files
 # ============================================
 set(SOURCES
     src/main.cpp
-    #src/fileHandling.cpp
+    # src/fileHandling.cpp
 )
 
 set(HEADERS
-    #src/fileHandling.h
     # Add your header files here
 )
 
 # ============================================
 # Executable
 # ============================================
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+if(WIN32)
+    set(APP_TYPE WIN32)
+else()
+    set(APP_TYPE "")
+endif()
+
+add_executable(${PROJECT_NAME} ${APP_TYPE} ${SOURCES} ${HEADERS})
 
 # Include directories
 target_include_directories(${PROJECT_NAME} 
@@ -54,21 +56,12 @@ target_include_directories(${PROJECT_NAME}
 # ============================================
 # Custom Library Paths
 # ============================================
-# Add your custom library directories here
 set(CUSTOM_LIBRARY_DIRS
-    # Example: ${CMAKE_CURRENT_SOURCE_DIR}/external/lib
-    # Example: /path/to/your/libraries
     ${CMAKE_CURRENT_SOURCE_DIR}/include/toml++
-    
 )
 
-# Add your custom include directories here
-set(CUSTOM_INCLUDE_DIRS
-    # Example: ${CMAKE_CURRENT_SOURCE_DIR}/external/include
-    # Example: /path/to/your/includes
-)
+set(CUSTOM_INCLUDE_DIRS)
 
-# Apply custom paths if specified
 if(CUSTOM_LIBRARY_DIRS)
     link_directories(${CUSTOM_LIBRARY_DIRS})
 endif()
@@ -80,39 +73,22 @@ endif()
 # ============================================
 # Link Libraries
 # ============================================
-# Add your custom libraries here
-set(CUSTOM_LIBRARIES
-    # Example: mylib
-    # Example: pthread
-    # Example: ${CMAKE_CURRENT_SOURCE_DIR}/external/lib/libcustom.a
-    #${CMAKE_CURRENT_SOURCE_DIR}/include/toml++/toml.h
-)
+set(CUSTOM_LIBRARIES) # Add other libs here if needed
 
+# Link wxWidgets and custom libraries (Note: No comma used here)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${wxWidgets_LIBRARIES} ${CUSTOM_LIBRARIES})
 
-
-if(CUSTOM_LIBRARIES)
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${CUSTOM_LIBRARIES} ${wxWidgets_LIBRARIES})
-endif()
-#target_link_libraries(myapp ${wxWidgets_LIBRARIES})
 # ============================================
 # Platform-Specific Settings
 # ============================================
 if(WIN32)
-    # Windows-specific settings
     target_compile_definitions(${PROJECT_NAME} PRIVATE PLATFORM_WINDOWS)
-    # Add Windows-specific libraries
-    # target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32)
+    # If using Win32 GUI (prevents console window from popping up)
+    # set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE YES)
 elseif(APPLE)
-    # macOS-specific settings
     target_compile_definitions(${PROJECT_NAME} PRIVATE PLATFORM_MACOS)
-    # Add macOS frameworks if needed
-    # find_library(COCOA_LIBRARY Cocoa)
-    # target_link_libraries(${PROJECT_NAME} PRIVATE ${COCOA_LIBRARY})
 elseif(UNIX)
-    # Linux-specific settings
     target_compile_definitions(${PROJECT_NAME} PRIVATE PLATFORM_LINUX)
-    # Add Linux-specific libraries
-    # target_link_libraries(${PROJECT_NAME} PRIVATE pthread dl)
 endif()
 
 # ============================================
@@ -138,23 +114,6 @@ else()
 endif()
 
 # ============================================
-# Find and Link Common Packages (Optional)
-# ============================================
-# Uncomment these to use common packages
-
-# Example: OpenGL
-# find_package(OpenGL REQUIRED)
-# target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL)
-
-# Example: Threads
-# find_package(Threads REQUIRED)
-# target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
-
-# Example: Boost
-# find_package(Boost REQUIRED COMPONENTS system filesystem)
-# target_link_libraries(${PROJECT_NAME} PRIVATE Boost::system Boost::filesystem)
-
-# ============================================
 # Installation
 # ============================================
 install(TARGETS ${PROJECT_NAME}
@@ -163,7 +122,22 @@ install(TARGETS ${PROJECT_NAME}
     ARCHIVE DESTINATION lib
 )
 
-install(DIRECTORY include/ DESTINATION include)
+# ============================================
+# Automatic DLL Copy (Windows Only)
+# ============================================
+if(WIN32)
+    # 1. Define where your wxWidgets DLLs are located. 
+    # Based on your error, they are here:
+    set(WX_DLL_DIR "C:/wxWidgets/lib/vc14x_x64_dll")
+
+    # 2. Copy the DLLs to the folder where your .exe is built
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${WX_DLL_DIR}"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
+        COMMENT "Copying wxWidgets DLLs from ${WX_DLL_DIR} to output directory..."
+    )
+endif()
 
 # ============================================
 # Print Configuration Summary
@@ -172,7 +146,6 @@ message(STATUS "")
 message(STATUS "Configuration Summary:")
 message(STATUS "  Project: ${PROJECT_NAME} v${PROJECT_VERSION}")
 message(STATUS "  Build Type: ${CMAKE_BUILD_TYPE}")
-message(STATUS "  C++ Standard: ${CMAKE_CXX_STANDARD}")
+message(STATUS "  wxWidgets LIBRARIES: ${wxWidgets_LIBRARIES}")
 message(STATUS "  Platform: ${CMAKE_SYSTEM_NAME}")
-message(STATUS "  Compiler: ${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "")
